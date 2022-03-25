@@ -3,7 +3,7 @@
 namespace HCaptcha;
 
 use HCaptcha\Requests\CurlRequest;
-use HCaptcha\Requests\RequestFormatException;
+use HCaptcha\Exceptions\RequestFormatException;
 use HCaptcha\Requests\RequestInterface;
 use HCaptcha\Responses\Response;
 
@@ -12,8 +12,7 @@ use HCaptcha\Responses\Response;
  *
  * @package hCaptcha
  */
-class hCaptcha
-{
+class hCaptcha {
     const VERIFY_URL = 'https://hcaptcha.com/siteverify';
 
     /**
@@ -38,8 +37,7 @@ class hCaptcha
      *
      * @throws RequestFormatException
      */
-    public function __construct($secretKey, $request = null)
-    {
+    public function __construct($secretKey, $request = null) {
         $this->secretKey = $secretKey;
 
         if ($request) {
@@ -59,8 +57,7 @@ class hCaptcha
      *
      * @return Response
      */
-    public function verify($response, $userIp = null)
-    {
+    public function verify($response, $userIp = null) {
         $response = $this->request->getResponse(
             self::VERIFY_URL,
             $this->secretKey,
@@ -71,8 +68,7 @@ class hCaptcha
         return new Response($response);
     }
 
-    public static function isSuccess($response, $secretKey, $userIp = null)
-    {
+    public static function isSuccess($response, $secretKey, $userIp = null) {
         $hCaptcha = new static($secretKey);
 
         return $hCaptcha->verify($response, $userIp)->isSuccess();
