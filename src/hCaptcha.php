@@ -23,6 +23,13 @@ class hCaptcha {
     protected $secretKey;
 
     /**
+     * default hCaptcha site key, can be overrided on each request
+     *
+     * @var string $siteKey
+     */
+    protected $siteKey;
+
+    /**
      * Request maker
      *
      * @var RequestInterface $request
@@ -39,6 +46,7 @@ class hCaptcha {
      */
     public function __construct($secretKey, $request = null) {
         $this->secretKey = $secretKey;
+        $this->siteKey = null;
 
         if ($request) {
             if ($request instanceof RequestInterface) {
@@ -51,26 +59,34 @@ class hCaptcha {
         }
     }
 
+    public function setSiteKey($siteKey) {
+        $this->siteKey = $siteKey;
+        return $this;
+    }
+
     /**
      * @param string $response
      * @param null   $userIp
      *
      * @return Response
      */
-    public function verify($response, $userIp = null) {
+    public function verify($response, $userIp = null, $siteKey = null) {
+        $_siteKey = isset($siteKey) ? $siteKey : $this->siteKey;
+
         $response = $this->request->getResponse(
             self::VERIFY_URL,
             $this->secretKey,
             $response,
-            $userIp
+            $userIp,
+            $_siteKey
         );
 
         return new Response($response);
     }
 
-    public static function isSuccess($response, $secretKey, $userIp = null) {
+    public static function isSuccess($response, $secretKey, $userIp = null, $siteKey = null) {
         $hCaptcha = new static($secretKey);
 
-        return $hCaptcha->verify($response, $userIp)->isSuccess();
+        return $hCaptcha->verify($response, $userIp, $siteKey)->isSuccess();
     }
 }
