@@ -9,8 +9,7 @@ namespace HCaptcha\Requests;
  *
  * @package hCaptcha
  */
-interface RequestInterface
-{
+interface RequestInterface {
     /**
      * Returns raw response from hCaptcha's verify url
      *
@@ -21,5 +20,5 @@ interface RequestInterface
      *
      * @return string
      */
-    public function getResponse($verifyUrl, $secretKey, $response, $userIp = null);
+    public function getResponse($verifyUrl, $secretKey, $response, $userIp = null, $siteKey = null);
 }

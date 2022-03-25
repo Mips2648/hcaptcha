@@ -7,8 +7,7 @@ namespace HCaptcha\Requests;
  *
  * @package hCaptcha
  */
-class CurlRequest implements RequestInterface
-{
+class CurlRequest implements RequestInterface {
     /**
      * Request to hCaptcha timeout
      *
@@ -16,20 +15,19 @@ class CurlRequest implements RequestInterface
      */
     protected $timeout;
 
-    public function __construct($timeout = 5)
-    {
+    public function __construct($timeout = 5) {
         $this->timeout = $timeout;
     }
 
     /**
      * @inheritDoc
      */
-    public function getResponse($verifyUrl, $secretKey, $response, $userIp = null)
-    {
+    public function getResponse($verifyUrl, $secretKey, $response, $userIp = null, $siteKey = null) {
         $requestParams = [
             'response' => $response,
             'secret'   => $secretKey,
             'remoteip' => $userIp,
+            'sitekey' => $siteKey
         ];
 
         $ch = curl_init($verifyUrl);
